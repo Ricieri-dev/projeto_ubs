@@ -1,5 +1,6 @@
 -- cria o banco
 CREATE DATABASE saude;
+
 USE saude;
 
 -- tabela de usuários do sistema (médicos, secretárias, admin)
