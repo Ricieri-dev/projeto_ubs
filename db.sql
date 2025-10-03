@@ -27,3 +27,14 @@ CREATE TABLE atendimentos (
     FOREIGN KEY (paciente_id) REFERENCES pacientes(id),
     FOREIGN KEY (medico_id) REFERENCES usuarios(id)
 );
+
+CREATE TABLE atendimentos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    paciente_id INT NOT NULL,
+    data_hora DATETIME NOT NULL,
+    cid VARCHAR,
+    alta_medica TINYINT(1) DEFAULT 0, --0 = N , 1 = S
+    encaminhamento VARCHAR(50),
+    observacoes TEXT,
+    FOREIGN KEY (paciente_id) REFERENCES paciente(id) ON DELETE CASCADE
+);
