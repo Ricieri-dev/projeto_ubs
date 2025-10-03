@@ -1,13 +1,17 @@
+-- cria o banco
 CREATE DATABASE saude;
 USE saude;
 
+-- tabela de usuários do sistema (médicos, secretárias, admin)
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    senha VARCHAR(255) NOT NULL
+    senha VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'medico', 'secretaria') NOT NULL DEFAULT 'secretaria'
 );
 
+-- tabela de pacientes (cadastrados normalmente pela secretária)
 CREATE TABLE pacientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -16,6 +20,7 @@ CREATE TABLE pacientes (
     telefone VARCHAR(20)
 );
 
+-- tabela de atendimentos (criados por médicos)
 CREATE TABLE atendimentos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     paciente_id INT NOT NULL,
@@ -24,17 +29,7 @@ CREATE TABLE atendimentos (
     cid VARCHAR(10),
     encaminhamento VARCHAR(50),
     alta BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (paciente_id) REFERENCES pacientes(id),
-    FOREIGN KEY (medico_id) REFERENCES usuarios(id)
-);
-
-CREATE TABLE atendimentos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    paciente_id INT NOT NULL,
-    data_hora DATETIME NOT NULL,
-    cid VARCHAR,
-    alta_medica TINYINT(1) DEFAULT 0, --0 = N , 1 = S
-    encaminhamento VARCHAR(50),
     observacoes TEXT,
-    FOREIGN KEY (paciente_id) REFERENCES paciente(id) ON DELETE CASCADE
+    FOREIGN KEY (paciente_id) REFERENCES pacientes(id) ON DELETE CASCADE,
+    FOREIGN KEY (medico_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
