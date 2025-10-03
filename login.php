@@ -1,30 +1,29 @@
 <?php
-
 session_start();
 include 'connection.php';
 
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
-    $password = $_POST['senha'];
+    $senha = $_POST['senha']; // 
 
-    //busca usuário pelo email
+    // busca usuário pelo email
     $sql = "SELECT * FROM usuarios WHERE email = '$email' LIMIT 1";
     $result = mysqli_query($conn, $sql);
 
-    if(mysqli_num_rows($result) == 1){
-        $user = mysqli_fetch_assoc($result) ;
+    if (mysqli_num_rows($result) == 1) {
+        $user = mysqli_fetch_assoc($result);
 
-        //pesquisar: Aqui você pode usar password_hash(), mas se o professor só ensinou senha pura:
-        if($senha == $user["senha"]){
+        // comparar senha (simples, já que não foi ensinado hash)
+        if ($senha == $user["senha"]) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['nome'] = $user['nome'];
-            header('Location; dashboard.php');
+
+            header('Location: dashboard.php');
             exit;
-        }else{
+        } else {
             $erro = 'Senha incorreta!';
         }
-
-    }else{
+    } else {
         $erro = 'Usuário não encontrado!';
     }
 }
@@ -39,11 +38,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 </head>
 <body class="container mt-5">
     <h2>Login</h2>
-    <?php if(isset($erro)) echo "<p class='text-danger'>$erro</p>" ?>
+    <?php if (isset($erro)) echo "<p class='text-danger'>$erro</p>"; ?>
 
     <form method="POST">
-        <input type="email" name="email" class="form-control mb-2" placeholder="Email">
-        <input type="password" name="senha" class="form-control mb-2" placeholder="Senha">
+        <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
+        <input type="password" name="senha" class="form-control mb-2" placeholder="Senha" required>
         <button class="btn btn-primary">Entrar</button>
     </form>
 </body>
+</html>
